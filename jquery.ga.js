@@ -1,4 +1,4 @@
-(function($) {
+;(function($) {
     window._gaq = window._gaq || [];
 
     function ucfirst(str) {
@@ -54,7 +54,7 @@
                 cache: true,
                 success: function() {
                     // never load this again...
-                    jQuery.ga._getScript = jQuery.noop;
+                    $.ga._getScript = $.noop;
                 }
             });
         }
