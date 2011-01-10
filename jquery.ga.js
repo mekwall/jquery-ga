@@ -5,28 +5,28 @@
         return str.charAt(0).toUpperCase() + str.substr(1);
     }
 
-    jQuery.ga = function( options ) {
-        if ( jQuery.type( options ) === "object" ) {
-            jQuery.each( options, function( option, value ) {
+    $.ga = function( options ) {
+        if ( $.type( options ) === "object" ) {
+            $.each( options, function( option, value ) {
                 var set = '_set' + ucfirst( option );
                 
-                jQuery.ga.push(set, value);
+                $.ga.push(set, value);
             });
         } else {
-            jQuery.ga.push('_setAccount', options);
+            $.ga.push('_setAccount', options);
         }
-        jQuery.ga.trackPageview(null);
-        jQuery.ga._getScript();
-        return jQuery.ga;
+        $.ga.trackPageview(null);
+        $.ga._getScript();
+        return $.ga;
     };
     
-    jQuery.each( 'trackPageview trackEvent'.split(/\s+/), function( idx, command ) {
-        jQuery.ga[ command ] = function( values ) {
+    $.each( 'trackPageview trackEvent'.split(/\s+/), function( idx, command ) {
+        $.ga[ command ] = function( values ) {
             return this.push( '_' + command, values);
         };
     });
 
-    $.extend( jQuery.ga, {
+    $.extend( $.ga, {
         debug: true,
         push: function(option, value) {
             var data = [],
