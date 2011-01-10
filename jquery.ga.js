@@ -15,36 +15,29 @@
         } else {
             $.ga.push('_setAccount', options);
         }
-        $.ga.trackPageview(null);
+        $.ga.trackPageview();
         $.ga._getScript();
         return $.ga;
     };
     
     $.each( 'trackPageview trackEvent'.split(/\s+/), function( idx, command ) {
-        $.ga[ command ] = function( values ) {
-            return this.push( '_' + command, values);
+        $.ga[ command ] = function(  ) {
+            return this.push( '_' + command, [].slice.call( arguments ) );
         };
     });
 
     $.extend( $.ga, {
         debug: true,
-        push: function(option, value) {
-            var data = [],
-                valType = $.type(value);
-            data.push(option);
-            if (valType == "undefined") {
-                return this;
-            } else if (valType == "boolean") {
-                value = (value === true) ? "true" : "false";
-            } else if (valType == "array") {
-                data = data.concat(value);
-            } else if (value != null) {
-                data.push(value);
-            }
+        push: function() {
+            var args = [].concat( arguments ),
+				data = $.map( args, function( value ) { 
+					return $.type( value ) === 'boolean' ? ( value ? 'true' : 'false' ) : value;
+				});
+			if ( data.length < 1 ) return this;
             if (this.debug) {
                 console.log("ga.push", data);
             }
-            _gaq.push(data);
+            _gaq.push( data );
             return this;
         },
         _getScript: function() {
@@ -53,6 +46,9 @@
                 dataType: "script",
                 cache: true,
                 success: function() {
+					if ( this.debug ) {
+						console.log('$.ga - Analytics Script loaded');
+					}
                     // never load this again...
                     $.ga._getScript = $.noop;
                 }
