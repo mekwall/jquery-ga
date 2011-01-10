@@ -22,14 +22,15 @@
     
     $.each( 'trackPageview trackEvent'.split(/\s+/), function( idx, command ) {
         $.ga[ command ] = function(  ) {
-            return this.push( '_' + command, [].slice.call( arguments ) );
+            var args = [].slice.call( arguments );
+            return this.push( '_' + command ], args );
         };
     });
 
     $.extend( $.ga, {
         debug: true,
         push: function() {
-            var args = [].concat( arguments ),
+            var args = [].concat( [].slice.call( arguments ) ),
                 data = $.map( args, function( value ) { 
                     return $.type( value ) === 'boolean' ? ( value ? 'true' : 'false' ) : value;
                 });
@@ -46,9 +47,6 @@
                 dataType: "script",
                 cache: true,
                 success: function() {
-					if ( this.debug ) {
-						console.log('$.ga - Analytics Script loaded');
-					}
                     // never load this again...
                     $.ga._getScript = $.noop;
                 }
