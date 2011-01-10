@@ -1,29 +1,33 @@
-(function($) {
+;(function($) {
     window._gaq = window._gaq || [];
-    $.ga = {
-        debug: true,
-        load: function(options) {
-            var account = options;
-            if ($.type(options) == "object") {
-                account = options.account;
-                this.push('_setDomainName', options.domain)
-                    .push('_setAllowHash', options.allowHash)
-                    .push('_setAllowLinker', options.allowLinker)
-                    .push('_setDetectFlash', options.detectFlash)
-                    .push('_setDetectTitle', options.detectTitle)
-                    .push('_setClientInfo', options.clientInfo);
-            }
-            return this.push('_setAccount', account)
-                .trackPage(null)
-                ._getScript();
 
-        },
-        trackPage: function(url) {
-            return this.push('_trackPageview', url);
-        },
-        trackEvent: function(event) {
-            return this.push('_trackEvent', event);
-        },
+    function ucfirst(str) {
+        return str.charAt(0).toUpperCase() + str.substr(1);
+    }
+
+    $.ga = function( options ) {
+        if ( $.type( options ) === "object" ) {
+            $.each( options, function( option, value ) {
+                var set = '_set' + ucfirst( option );
+                
+                $.ga.push(set, value);
+            });
+        } else {
+            $.ga.push('_setAccount', options);
+        }
+        $.ga.trackPageview(null);
+        $.ga._getScript();
+        return $.ga;
+    };
+    
+    $.each( 'trackPageview trackEvent'.split(/\s+/), function( idx, command ) {
+        $.ga[ command ] = function( values ) {
+            return this.push( '_' + command, values);
+        };
+    });
+
+    $.extend( $.ga, {
+        debug: true,
         push: function(option, value) {
             var data = [],
                 valType = $.type(value);
@@ -50,9 +54,9 @@
                 cache: true,
                 success: function() {
                     // never load this again...
-                    jQuery.ga._getScript = jQuery.noop;
+                    $.ga._getScript = $.noop;
                 }
             });
         }
-    };
+    });
 })(jQuery);
