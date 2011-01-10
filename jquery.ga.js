@@ -37,7 +37,7 @@
             } else if (valType == "boolean") {
                 value = (value === true) ? "true" : "false";
             } else if (valType == "array") {
-                data.join(value);
+                data = data.concat(value);
             } else if (value != null) {
                 data.push(value);
             }
