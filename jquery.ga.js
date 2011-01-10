@@ -30,12 +30,12 @@
         debug: true,
         push: function() {
             var args = [].concat( arguments ),
-				data = $.map( args, function( value ) { 
-					return $.type( value ) === 'boolean' ? ( value ? 'true' : 'false' ) : value;
-				});
-			if ( data.length < 1 ) return this;
-            if (this.debug) {
-                console.log("ga.push", data);
+                data = $.map( args, function( value ) { 
+                    return $.type( value ) === 'boolean' ? ( value ? 'true' : 'false' ) : value;
+                });
+            if ( data.length < 1 ) return this;
+            if ( this.debug ) {
+                console.log( "ga.push", data );
             }
             _gaq.push( data );
             return this;
