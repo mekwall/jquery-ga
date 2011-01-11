@@ -23,7 +23,7 @@
     $.each( 'trackPageview trackEvent'.split(/\s+/), function( idx, command ) {
         $.ga[ command ] = function(  ) {
             var args = [].slice.call( arguments );
-            return this.push( '_' + command ], args );
+            return this.push( '_' + command, args );
         };
     });
 
